@@ -1,0 +1,8 @@
+services:
+  api:
+    build:
+      context: api
+      dockerfile: Dockerfile
+    image: rebac-api
+    ports:
+      - "5100:5100"
