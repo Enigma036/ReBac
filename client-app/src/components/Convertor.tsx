@@ -5,6 +5,7 @@ import Alert from 'react-bootstrap/Alert';
 const Convertor = () => {
   const [image, setImage] = useState<File | undefined>();
   const [preview, setPreview] = useState<string | undefined>();
+  const [error, setError] = useState<string | undefined>();
 
   useEffect(() => {
     const formData = new FormData();
@@ -18,10 +19,10 @@ const Convertor = () => {
         body: formData
       }).then(r => r.json())
       .catch(() => {
-        console.log("error");
+        setError("Error while converting the image");
       });
 
-      if (result["url"]){
+      if (result && result["url"]){
         const url = "http://127.0.0.1:5100/" + result["url"];
         const blob = await fetch(url, {
           method: "GET",
@@ -32,6 +33,12 @@ const Convertor = () => {
           const previewImage = URL.createObjectURL(blob);
           setPreview(previewImage);
         }
+      }
+      else if (result && result["message"]){
+        setError(result["message"]);
+      }
+      else {
+        setError("Error while converting the image");
       }
     }
 
@@ -46,16 +53,28 @@ const Convertor = () => {
     setImage(target.files[0]);
   }
 
+  const handleOnClickForImage = () => {
+    if (preview){
+      const link = document.createElement("a");
+      link.href = preview;
+      link.download = "image.png";
+      link.click();
+    }
+  }
+
   return (
     <>
         {preview ?
-          <img src={preview}></img>
+          <img src={preview} onClick={handleOnClickForImage}></img>
           :
           <input accept="image/png, image/jpeg" type="file" onChange={handleOnChangeForFile}></input>
         }
-        <Alert>
-          Ahoj  
+        {error && 
+        <Alert variant="danger">
+          <h4>Error</h4>
+          {error}
         </Alert>
+        }
     </>
   )
 }

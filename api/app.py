@@ -10,8 +10,13 @@ UPLOAD_FOLDER = 'static/upload_images/'
 OUTPUT_FOLDER = 'static/output_images/'
 ALLOWED_EXTENSIONS = set(['.png', '.jpg', '.jpeg'])
 
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+if not os.path.exists(OUTPUT_FOLDER):
+    os.makedirs(OUTPUT_FOLDER)
+
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:8080"}})
+CORS(app, resources={r"/*": {"origins": "*"}})
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 20 * 1000 * 1000
 
@@ -41,12 +46,18 @@ def removebg():
             output = remove(input)
             output_path = os.path.join(OUTPUT_FOLDER, f"{input_name}-{str(uuid.uuid4())[:6]}.png")
             output.save(output_path)
+
+            input.close()
+
+            os.remove(input_path)
+
             return jsonify({
                 "result": "success",
                 "url": f"{output_path}"
             }), 200
         except Exception as e:
             print(e)
+            os.remove(input_path)
             return jsonify({
                 "message": "Error"
             }), 400

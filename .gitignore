@@ -404,4 +404,4 @@ client-app/dist
 client-app/dist-ssr
 client-app/*.local
 
-
+api/static
