@@ -14,7 +14,7 @@ const Convertor = () => {
 
     const asyncFunction = async () => {
       formData.append("file", image);
-      const result = await fetch("http://127.0.0.1:5100/api/removebg", {
+      const result = await fetch("/api/removebg", {
         method: "POST",
         body: formData
       }).then(r => r.json())
@@ -23,7 +23,7 @@ const Convertor = () => {
       });
 
       if (result && result["url"]){
-        const url = "http://127.0.0.1:5100/" + result["url"];
+        const url = "/" + result["url"];
         const blob = await fetch(url, {
           method: "GET",
         })
@@ -33,6 +33,13 @@ const Convertor = () => {
           const previewImage = URL.createObjectURL(blob);
           setPreview(previewImage);
         }
+
+
+        const filename = result["url"].split("/").pop();
+        const urlForDelete = "/api/delete/" + filename;
+        await fetch(urlForDelete, {
+          method: "GET",
+        });
       }
       else if (result && result["message"]){
         setError(result["message"]);

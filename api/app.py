@@ -61,7 +61,33 @@ def removebg():
             return jsonify({
                 "message": "Error"
             }), 400
+            
+@app.route("/api/delete/<id>", methods=['GET'])
+def remove_image(id):
+    if request.method == "GET":
+        try:
+            if not os.path.exists(os.path.join(OUTPUT_FOLDER, id)):
+                return jsonify({
+                    "message": "File not found"
+                }), 404
+                
+            os.remove(os.path.join(OUTPUT_FOLDER, id))
+            return jsonify({
+                "result": "success"
+            }), 200
+        except Exception as e:
+            print(e)
+            return jsonify({
+                "message": "Error"
+            }), 400
+    
+
+def clear_image():
+    for file in os.listdir(UPLOAD_FOLDER):
+        os.remove(os.path.join(UPLOAD_FOLDER, file))
+    for file in os.listdir(OUTPUT_FOLDER):
+        os.remove(os.path.join(OUTPUT_FOLDER, file))
 
 if __name__ == "__main__":
     #clear_image()
-    app.run(host="0.0.0.0", debug=True, port=5100, threaded=True)
+    app.run(host="0.0.0.0", debug=True, port=5000, threaded=True)

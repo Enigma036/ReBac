@@ -10,6 +10,6 @@ RUN pip install -r requirements.txt
 
 ENV FLASK_ENV production
 
-EXPOSE 5100
+EXPOSE 5000
 
-CMD ["gunicorn", "-b", ":5100", "app:app"]
+CMD ["gunicorn", "-b", ":5000", "app:app"]

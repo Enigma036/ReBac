@@ -4,5 +4,11 @@ services:
       context: api
       dockerfile: Dockerfile
     image: rebac-api
+  client:
+    build:
+      context: client
+      dockerfile: Dockerfile
+    image: rebac-client
     ports:
-      - "5100:5100"
+      - "3000:80"
+  
