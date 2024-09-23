@@ -4,6 +4,12 @@ services:
       context: api
       dockerfile: Dockerfile
     image: rebac-api
+    environment:
+      FLASK_ENV: production
+    depends_on:
+      - client   
+    ports:
+      - "5000:5000"
   client:
     build:
       context: client
@@ -11,4 +17,6 @@ services:
     image: rebac-client
     ports:
       - "3000:80"
+    depends_on:
+      - api
   

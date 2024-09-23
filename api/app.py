@@ -89,5 +89,5 @@ def clear_image():
         os.remove(os.path.join(OUTPUT_FOLDER, file))
 
 if __name__ == "__main__":
-    #clear_image()
-    app.run(host="0.0.0.0", debug=True, port=5000, threaded=True)
+    clear_image()
+    app.run(host="0.0.0.0", debug=False, port=5000, threaded=True)
